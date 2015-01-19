@@ -39,21 +39,23 @@ class NewVisitorTest(unittest.TestCase):
     
     table = self.browser.find_element_by_id('id_list_table')
     rows = table.find_elements_by_tag_name('tr')
-    self.assertTrue(
-        any(row.text == '1: Buy peacock feathers' for row in rows),
-        "New to-do item did not appear in the table."
-    )
+    self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
 
     # The text box is still there, and Edith enters another
-    # to-do: "Use peacock feathers". 
-    self.fail('Finish the test!')
+    # to-do: "Use peacock feathers to make a fly". 
+    inputbox = self.browser.find_element_by_id('id_new_item')
+    inputbox.send_keys('Use peacock feathers to make a fly')
+    inputbox.send_keys(Keys.ENTER)
 
     #She sees that on her list once th page updates.
-
+    table = self.browser.find_element_by_id('id_list_table')
+    rows = table.find_elements_by_tag_name('tr')
+    self.assertIn('1: Buy peacock feathers', [r.text for r in rows])
+    self.assertIn('2: Use peacock feathers to make a fly', [r.text for r in rows])
 
     # Ediths leaves the website and then comes back using her
     # unique URL (check for explanatory text).
-
+    self.fail('Finish the test!')
 
     # The to-do list is still here.
 
