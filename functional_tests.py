@@ -16,6 +16,11 @@ class NewVisitorTest(unittest.TestCase):
     time.sleep(0.5)
     self.browser.quit()
 
+  def check_for_row_in_list_table(self, row_text):
+    table = self.browser.find_element_by_id('id_list_table')
+    rows = table.find_elements_by_tag_name('tr')
+    self.assertIn(row_text, [r.text for r in rows])
+
   def test_can_start_list_and_retrieve_later(self):
     # Edith goes to check out the homepage
     self.browser.get('http://localhost:8000')
@@ -37,9 +42,7 @@ class NewVisitorTest(unittest.TestCase):
     # "Buy peacock feathers" in her list of to-do's
     inputbox.send_keys(Keys.ENTER)
     
-    table = self.browser.find_element_by_id('id_list_table')
-    rows = table.find_elements_by_tag_name('tr')
-    self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
+    self.check_for_row_in_list_table('1: Buy peacock feathers')
 
     # The text box is still there, and Edith enters another
     # to-do: "Use peacock feathers to make a fly". 
@@ -48,10 +51,8 @@ class NewVisitorTest(unittest.TestCase):
     inputbox.send_keys(Keys.ENTER)
 
     #She sees that on her list once th page updates.
-    table = self.browser.find_element_by_id('id_list_table')
-    rows = table.find_elements_by_tag_name('tr')
-    self.assertIn('1: Buy peacock feathers', [r.text for r in rows])
-    self.assertIn('2: Use peacock feathers to make a fly', [r.text for r in rows])
+    self.check_for_row_in_list_table('1: Buy peacock feathers')
+    self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
 
     # Ediths leaves the website and then comes back using her
     # unique URL (check for explanatory text).
