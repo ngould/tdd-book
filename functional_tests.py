@@ -1,3 +1,5 @@
+import time
+
 import unittest
 
 from selenium import webdriver
@@ -11,6 +13,7 @@ class NewVisitorTest(unittest.TestCase):
     self.browser.implicitly_wait(2)
 
   def tearDown(self):
+    time.sleep(0.5)
     self.browser.quit()
 
   def test_can_start_list_and_retrieve_later(self):
@@ -36,7 +39,10 @@ class NewVisitorTest(unittest.TestCase):
     
     table = self.browser.find_element_by_id('id_list_table')
     rows = table.find_elements_by_tag_name('tr')
-    self.assertTrue(any(row.text == '1: Buy peacock feathers' for row in rows))
+    self.assertTrue(
+        any(row.text == '1: Buy peacock feathers' for row in rows),
+        "New to-do item did not appear in the table."
+    )
 
     # The text box is still there, and Edith enters another
     # to-do: "Use peacock feathers". 
