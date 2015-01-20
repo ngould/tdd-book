@@ -42,7 +42,7 @@ class NewVisitorTest(LiveServerTestCase):
     # "Buy peacock feathers" in her list of to-do's
     inputbox.send_keys(Keys.ENTER)
     edith_list_url = self.browser.current_url
-    self.assertRegex(edith_list_url, '/lists/.+')
+    self.assertRegexpMatches(edith_list_url, '/lists/.+')
     self.check_for_row_in_list_table('1: Buy peacock feathers')
 
     # The text box is still there, and Edith enters another
@@ -51,7 +51,7 @@ class NewVisitorTest(LiveServerTestCase):
     inputbox.send_keys('Use peacock feathers to make a fly')
     inputbox.send_keys(Keys.ENTER)
 
-    #She sees that on her list once th page updates.
+    #She sees that on her list once the page updates.
     self.check_for_row_in_list_table('1: Buy peacock feathers')
     self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
 
@@ -60,7 +60,7 @@ class NewVisitorTest(LiveServerTestCase):
     ## We use a new browser session to make sure that no information
     ## of Edith's is coming through from cookies, etc.
     self.browser.quit()
-    self.browser.webdriver.Firefox()
+    self.browser = webdriver.Firefox()
 
     # Francis visits the home page. There is no sign of Edith's list.
     self.browser.get(self.live_server_url)
@@ -76,7 +76,7 @@ class NewVisitorTest(LiveServerTestCase):
 
     # Francis gets his own unique URL
     francis_list_url = self.browser.current_url
-    self.assertRegex(francis_list_url, '/lists/.+')
+    self.assertRegexpMatches(francis_list_url, '/lists/.+')
     self.assertNotEqual(francis_list_url, edith_list_url)
 
     # Again, there is no trace of Edith's list
